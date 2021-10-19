@@ -81,7 +81,11 @@ const Home = () => {
           <div>
             {renderSchedules}
           </div>
-          <Snackbar open={scheduleEvent} autoHideDuration={6000} onClose={() => { dispatch({ type: SCHEDULE_EVENT_CLEAR }) }}>
+          <Snackbar 
+            open={scheduleEvent} 
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            autoHideDuration={6000} 
+            onClose={() => { dispatch({ type: SCHEDULE_EVENT_CLEAR }) }}>
             <Alert onClose={() => { dispatch({ type: SCHEDULE_EVENT_CLEAR }) }} severity="success" sx={{ width: '100%' }}>
               {scheduleMessage}
             </Alert>

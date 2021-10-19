@@ -1,11 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Select, TextField, MenuItem, Button, InputLabel } from '@material-ui/core';
-import { CustomLink } from '../../utils';
-import { AddSchedule, ScheduleForm, Field, FieldContainer } from './styled';
-import { postSchedules, getSchedules, CLEAR_SCHEDULE } from '../../actions/schedules';
+import { CustomLink, MainContainer } from '../../styled';
+import { ScheduleForm, Field, FieldContainer, AddScheduleHeader } from './styled';
+import { postSchedules, CLEAR_SCHEDULE } from '../../actions/schedules';
 
-const Create = () => {
+const Create = ({ history }) => {
   const dispatch = useDispatch();
 
   const [formValues, setFormValues] = React.useState({
@@ -22,16 +23,17 @@ const Create = () => {
 
   const createSchedule = (e) => {
     if(formValues.title && formValues.date && formValues.status){
-      dispatch(postSchedules(formValues));
+      dispatch(postSchedules(formValues, history));
       e.preventDefault();
     }
   }
 
     return (
-        <AddSchedule>
-          <div>
+        <MainContainer>
+          <AddScheduleHeader>
+            <CustomLink to="/" onClick={() => dispatch({ type: CLEAR_SCHEDULE })}><ArrowBackIcon /></CustomLink>  
             <p>Add Schedule</p>
-          </div>
+          </AddScheduleHeader>
           <ScheduleForm>
               <TextField
                 required
@@ -82,14 +84,11 @@ const Create = () => {
                   </Select>
                 </FieldContainer>
               </Field>
-              <Button type="submit" variant="contained" onClick={(e) => createSchedule(e)}>
+              <Button type="submit" color="primary" variant="contained" onClick={(e) => createSchedule(e)} style={{maxWidth:"400px"}}>
                   Add Schedule
               </Button>
           </ScheduleForm>
-          <div>
-            <CustomLink to="/" onClick={() => dispatch({ type: CLEAR_SCHEDULE })}>Back</CustomLink>  
-          </div>
-        </AddSchedule>
+        </MainContainer>
     )
 }
 

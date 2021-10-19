@@ -2,6 +2,8 @@ import axios from "axios";
 
 export const FILL_SCHEDULES = "FILL_SCHEDULES";
 export const GET_SCHEDULE = "GET_SCHEDULE";
+export const SCHEDULE_EVENT_SUCCESS = "SCHEDULE_EVENT_SUCCESS";
+export const SCHEDULE_EVENT_CLEAR = "SCHEDULE_EVENT_CLEAR";
 export const CLEAR_SCHEDULE = "CLEAR_SCHEDULE";
 
 export const getSchedules = () => {
@@ -38,7 +40,7 @@ export const getScheduleId = (id) => {
     };
 };
 
-export const postSchedules = (userData) => {
+export const postSchedules = (userData, history) => {
     const payload = { ...userData };
     const requestOptions = {
         method: "POST",
@@ -46,10 +48,11 @@ export const postSchedules = (userData) => {
         headers: { "Content-Type": "application/json" },
         data: JSON.stringify(payload)
     };
-    return () =>{
+    return (dispatch) =>{
         axios(requestOptions)
             .then((response) => {
-                console.log(response);
+                history.push("/");
+                dispatch({ type: SCHEDULE_EVENT_SUCCESS, message: "Schedule added successfully!" })
             })
             .catch((error) => {
                 console.log(error);
@@ -57,7 +60,7 @@ export const postSchedules = (userData) => {
     };
 }
 
-export const updateSchedule = (userData, id) => {
+export const updateSchedule = (userData, id, history) => {
     const data = userData;
     delete data["id"];
     const payload = { ...data };
@@ -70,7 +73,8 @@ export const updateSchedule = (userData, id) => {
     return (dispatch) =>{
         axios(requestOptions)
             .then((response) => {
-                dispatch({ type: GET_SCHEDULE, data: response.data });
+                history.push("/");
+                dispatch({ type: SCHEDULE_EVENT_SUCCESS, message: "Schedule successfully updated!" })
             })
             .catch((error) => {
                 console.log(error);
@@ -86,8 +90,9 @@ export const deleteSchedule = (history, id) => {
     };
     return (dispatch) =>{
         axios(requestOptions)
-            .then((response) => {
+            .then(() => {
                 history.push("/");
+                dispatch({ type: SCHEDULE_EVENT_SUCCESS, message: "Schedule successfully deleted!" })
             })
             .catch((error) => {
                 console.log(error);

@@ -1,10 +1,16 @@
 {
   "schedules": [
     {
-      "title": "Lunch with Joe",
-      "date": "2021-10-17T17:11",
-      "status": "Pending",
-      "id": 1
+      "title": "Meeting today",
+      "date": "2021-10-20T13:03",
+      "status": "Done",
+      "id": 2
+    },
+    {
+      "title": "Lunch with Doe",
+      "date": "2021-10-20T13:04",
+      "status": "On Going",
+      "id": 3
     }
   ]
 }

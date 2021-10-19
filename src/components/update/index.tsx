@@ -1,10 +1,14 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
-import { Select, TextField, MenuItem, Button, InputLabel } from '@material-ui/core';
-import { CustomLink } from "../../utils";
-import { AddSchedule, ScheduleForm, Field, FieldContainer } from './styled';
-import { updateSchedule, deleteSchedule, getScheduleId } from '../../actions/schedules';
+import { Select, TextField, MenuItem, InputLabel } from '@material-ui/core';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { CustomLink, MainContainer } from "../../styled";
+import { ScheduleForm, Field, FieldContainer, UpdateButton, FunctionButtonContainer, DeleteButton, UpdateScheduleHeader } from './styled';
+import DeleteConfirmationDialog from './dialog';
+import { updateSchedule, deleteSchedule, getScheduleId, CLEAR_SCHEDULE } from '../../actions/schedules';
 
 const Update = ({history}) => {
   const [formValues, setFormValues] = React.useState({
@@ -12,6 +16,7 @@ const Update = ({history}) => {
     date: "",
     status: "Pending",
   });
+  const [dialogOpen, setDialogState] = React.useState(false);
   const dispatch = useDispatch();
   let params: any = useParams();
   const schedule = useSelector(({ schedules }: RootStateOrAny)=> schedules.savedSchedule);
@@ -23,7 +28,7 @@ const Update = ({history}) => {
     else{
       dispatch(getScheduleId(params.id));
     }
-  }, [schedule]);
+  }, [schedule, dialogOpen]);
 
   
   const setValues = (e) => {
@@ -36,22 +41,23 @@ const Update = ({history}) => {
     if(formValues.title && formValues.date && formValues.status){
       
       e.preventDefault();
-      dispatch(updateSchedule(formValues, params.id));
+      dispatch(updateSchedule(formValues, params.id, history));
     }
   }
 
-  const deleteScheduleInit = (e) => {
+  const deleteScheduleInit = () => {
     if(formValues.title && formValues.date && formValues.status){
-      e.preventDefault();
       dispatch(deleteSchedule(history, params.id));
     }
   }
 
     return (
-        <AddSchedule>
-          <div>
+        <MainContainer>
+          <UpdateScheduleHeader>
+            <CustomLink to="/" onClick={() => dispatch({ type: CLEAR_SCHEDULE })}><ArrowBackIcon /></CustomLink>  
             <p>Update Schedule</p>
-          </div>
+          </UpdateScheduleHeader>
+          <DeleteConfirmationDialog open={dialogOpen} handleClose={() => setDialogState(false) } onConfirm={() => deleteScheduleInit()}/>
           <ScheduleForm>
               <TextField
                 required
@@ -103,17 +109,16 @@ const Update = ({history}) => {
                   </Select>
                 </FieldContainer>
               </Field>
-              <Button type="submit" variant="contained" style={{backgroundColor: "#0062CC", color: "white"}} onClick={(e) => createSchedule(e)}>
-                  Update Schedule
-              </Button>
-              <Button type="submit" variant="contained" style={{backgroundColor: "#A51D2A", color: "white"}} onClick={(e) => deleteScheduleInit(e)}>
-                  Delete Schedule
-              </Button>
+              <FunctionButtonContainer>
+                <UpdateButton type="submit" variant="contained" onClick={(e) => createSchedule(e)}>
+                    <EditIcon /> Update Schedule
+                </UpdateButton>
+                <DeleteButton variant="contained" onClick={(e) => setDialogState(true)}>
+                    <DeleteIcon /> Delete Schedule
+                </DeleteButton>
+              </FunctionButtonContainer>
           </ScheduleForm>
-          <div>
-            <CustomLink to="/">Back</CustomLink>  
-          </div>
-        </AddSchedule>
+        </MainContainer>
     )
 }
 

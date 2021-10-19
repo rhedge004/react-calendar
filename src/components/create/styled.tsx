@@ -7,6 +7,14 @@ export const AddSchedule = styled.div`
     margin: calc(10px + 2vmin);
 `;
 
+export const AddScheduleHeader = styled.div`
+    display: flex;
+    flex-direction: row;
+    p{
+        padding: 20px;
+    }
+`;
+
 export const ScheduleForm = styled.form`
     display: flex;
     flex-direction: column;

@@ -1,5 +1,8 @@
-import { FILL_SCHEDULES, GET_SCHEDULE, CLEAR_SCHEDULE } from "../actions/schedules";
-const defaultState = {};
+import { FILL_SCHEDULES, GET_SCHEDULE, CLEAR_SCHEDULE, SCHEDULE_EVENT_SUCCESS, SCHEDULE_EVENT_CLEAR } from "../actions/schedules";
+const defaultState = {
+    scheduleEvent: false,
+    scheduleMessage: "",
+};
 
 const schedules = (state = defaultState, action:any) => {
     switch(action.type){
@@ -11,6 +14,16 @@ const schedules = (state = defaultState, action:any) => {
         case GET_SCHEDULE:
             return ({
                 savedSchedule: action.data
+            });
+        case SCHEDULE_EVENT_SUCCESS:
+            return ({
+                scheduleEvent: true,
+                scheduleMessage: action.message,
+            });
+        case SCHEDULE_EVENT_CLEAR:
+            return ({
+                scheduleEvent: false,
+                scheduleMessage: "",
             });
         case CLEAR_SCHEDULE:
             return ({
